@@ -11,7 +11,9 @@ set(HEADER_FILES
         ${GDK}/inc)
 
 set(SRC
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/main.c)
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/main.c
+        inc/balls.h
+        src/balls.c)
 
 IF(CMAKE_BUILD_TYPE MATCHES Debug)
     set(type debug)

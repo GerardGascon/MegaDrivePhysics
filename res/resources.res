@@ -1,0 +1,1 @@
+SPRITE ball "ball.png" 2 2 BEST

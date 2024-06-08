@@ -123,6 +123,7 @@ void moveBalls(){
 		for (int j = i + 1; j < BALLS; ++j) {
 			if (intersectCircles(&balls[i], &balls[j])){
 				resolveCollision(&balls[i], &balls[j]);
+				moveBall(&balls[i]);
 			}
 		}
 	}

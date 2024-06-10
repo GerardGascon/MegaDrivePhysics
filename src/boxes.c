@@ -84,14 +84,45 @@ bool intersectBoxes(struct box* b1, struct box* b2, struct aabb* intersection){
 		s16 x2 = min(b1X2, b2X2);
 		s16 y1 = max(b1Y1, b2Y1);
 		s16 y2 = min(b1Y2, b2Y2);
-		*intersection = (struct aabb){{x1, y1}, {x2, y2}};
+		*intersection = (struct aabb){{x1, y1}, {x2 - x1, y2 - y1}};
 		return TRUE;
 	}
 	return FALSE;
 }
 
-void resolveCollision(struct box* b1, struct box* b2, struct aabb intersection){
-	
+void resolveBoxCollision(struct box* b1, struct box* b2, struct aabb intersection){
+	if (intersection.size.x < intersection.size.y){
+		fix16 velX = fix16Div((abs(b1->velocity.x) + abs(b2->velocity.x)), FIX16(2));
+		if (intersection.position.x < b1->integerPosition.x + (b2->size.x >> 1)){
+			b1->integerPosition.x += intersection.size.x >> 1;
+			b2->integerPosition.x -= intersection.size.x >> 1;
+			b1->velocity.x = velX;
+			b2->velocity.x = -velX;
+		}else{
+			b1->integerPosition.x -= intersection.size.x >> 1;
+			b2->integerPosition.x += intersection.size.x >> 1;
+			b1->velocity.x = -velX;
+			b2->velocity.x = velX;
+		}
+	}else{
+		fix16 velY = fix16Div((abs(b1->velocity.y) + abs(b2->velocity.y)), FIX16(2));
+		if (intersection.position.y < b1->integerPosition.y + (b2->size.y >> 1)){
+			b1->integerPosition.y += intersection.size.y >> 1;
+			b2->integerPosition.y -= intersection.size.y >> 1;
+			b1->velocity.y = velY;
+			b2->velocity.y = -velY;
+		}else{
+			b1->integerPosition.y -= intersection.size.y >> 1;
+			b2->integerPosition.y += intersection.size.y >> 1;
+			b1->velocity.y = -velY;
+			b2->velocity.y = velY;
+		}
+	}
+
+	b1->position.x = intToFix16(b1->integerPosition.x);
+	b1->position.y = intToFix16(b1->integerPosition.y);
+	b2->position.x = intToFix16(b2->integerPosition.x);
+	b2->position.y = intToFix16(b2->integerPosition.y);
 }
 
 void moveBoxes(){
@@ -101,7 +132,7 @@ void moveBoxes(){
 		for (int j = i + 1; j < BOXES; ++j) {
 			struct aabb intersection;
 			if (intersectBoxes(&boxes[i], &boxes[j], &intersection)){
-				resolveCollision(&boxes[i], &boxes[j], intersection);
+				resolveBoxCollision(&boxes[i], &boxes[j], intersection);
 				moveBox(&boxes[i]);
 			}
 		}

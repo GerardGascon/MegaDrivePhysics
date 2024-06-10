@@ -6,7 +6,7 @@
 #include "balls.h"
 #include "resources.h"
 
-#define BALLS 30
+#define BALLS 40
 
 struct ball {
 	Vect2D_f16 position;
@@ -75,7 +75,7 @@ bool intersectCircles(struct ball* b1, struct ball* b2){
 	return TRUE;
 }
 
-void resolveCollision(struct ball* b1, struct ball* b2){
+void resolveCircleCollision(struct ball* b1, struct ball* b2){
 	int middlePointX = (b1->integerPosition.x + b2->integerPosition.x) >> 1;
 	int middlePointY = (b1->integerPosition.y + b2->integerPosition.y) >> 1;
 
@@ -122,7 +122,7 @@ void moveBalls(){
 
 		for (int j = i + 1; j < BALLS; ++j) {
 			if (intersectCircles(&balls[i], &balls[j])){
-				resolveCollision(&balls[i], &balls[j]);
+				resolveCircleCollision(&balls[i], &balls[j]);
 				moveBall(&balls[i]);
 			}
 		}

@@ -1,14 +1,15 @@
 #include <genesis.h>
 
-#include "balls.h"
+#include "boxes.h"
 
 int main() {
 	SPR_init();
 
-	initializeBalls();
+	initializeBoxes();
 	
 	while (TRUE){
-		moveBalls();
+		VDP_showFPS(FALSE);
+		moveBoxes();
 		
 		SPR_update();
 		SYS_doVBlankProcess();

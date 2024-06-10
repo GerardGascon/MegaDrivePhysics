@@ -13,7 +13,9 @@ set(HEADER_FILES
 set(SRC
         ${CMAKE_CURRENT_SOURCE_DIR}/src/main.c
         inc/balls.h
-        src/balls.c)
+        src/balls.c
+        src/boxes.c
+        inc/boxes.h)
 
 IF(CMAKE_BUILD_TYPE MATCHES Debug)
     set(type debug)
